@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <script>
+        let user_topic = {{ user_topic | tojson | safe }};
+        let topic_details = {{ topic_details | tojson | safe }};
+
+        console.log(topic_details)
+    </script>
+
+    <div class="columns">
+        <div class="column">
+            <h1 class="is-size-3">You are asking about: {{ user_topic }}</h1>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="box">
+                {{  topic_details["topic_explanation"] }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

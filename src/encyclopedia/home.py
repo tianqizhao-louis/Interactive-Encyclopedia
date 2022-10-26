@@ -17,14 +17,31 @@ def index():
     return render_template('home.html')
 
 
-# explain topic route
+@bp.route('/topic/<string:user_topic>')
+def topic(user_topic=None):
+    # get explanation
+    openai.api_key = current_app.config["API_KEY"]
+    prompt = f'For a 5 years old kid, explain what {user_topic} is'
+    completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, prompt=prompt)
+    topic_explanation = completion.choices[0].text.strip()
+    topic_details = {'prompt': prompt, 'topic_explanation': topic_explanation}
+
+    return render_template("topic.html", user_topic=user_topic, topic_details=topic_details)
+
+
+@bp.route('/select/<string:user_topic>')
+def select(user_topic=None):
+    return redirect(url_for('home.topic', user_topic=user_topic))
+
+
+# explain topic.html route
 @bp.route('/explain_topic', methods=['GET', 'POST'])
 def explainTopic():
     openai.api_key = current_app.config["API_KEY"]
 
     # json_data = request.get_json()
     global topic
-    topic = request.get_json()['topic']
+    topic = request.get_json()['topic.html']
     prompt = f'For a 5 years old kid, explain what {topic} is'
     completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, prompt=prompt)
 
