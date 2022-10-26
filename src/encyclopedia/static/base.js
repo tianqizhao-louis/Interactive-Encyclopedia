@@ -24,9 +24,10 @@ $(document).ready(function () {
 
 //select topic
 function selectTopic() {
+    $("#select-topic-button").addClass('is-loading')
 
 	let topic = $("#topic-input").val()
-
+    
 	$.ajax({
 		url: "/explain_topic",
 		type: "POST",
@@ -34,6 +35,7 @@ function selectTopic() {
 		data: JSON.stringify({"topic": topic}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#select-topic-button").removeClass('is-loading')
 			let prompt = data['prompt']
 			let topicExplanation = data['topicExplanation']
 			console.log("prompt:", prompt," topicExplanation:",topicExplanation)
@@ -50,6 +52,7 @@ function selectTopic() {
 
 // list subtopics
 function listSubtopics() {
+    $("#list-subtopic-button").addClass('is-loading')
 
 	$.ajax({
 		url: "/list_subtopics",
@@ -58,6 +61,7 @@ function listSubtopics() {
 		data: JSON.stringify({}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#list-subtopic-button").removeClass('is-loading')
 			let prompt = data['prompt']
 			let subtopicListStr = data['subtopicListStr']
 			console.log("prompt:", prompt," subtopicListStr:",subtopicListStr)
@@ -73,6 +77,7 @@ function listSubtopics() {
 
 //select subtopic
 function selectSubtopic() {
+    $("#select-subtopic-button").addClass('is-loading')
 
 	let subtopic = $("#subtopic-input").val()
 
@@ -83,6 +88,7 @@ function selectSubtopic() {
 		data: JSON.stringify({"subtopic": subtopic}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#select-subtopic-button").removeClass('is-loading')
 			let prompt = data['prompt']
 			let subtopicExplanation = data['subtopicExplanation']
 			console.log("prompt:", prompt," subtopicExplanation:",subtopicExplanation)
@@ -99,6 +105,7 @@ function selectSubtopic() {
 
 // list subsubtopics
 function listSubsubtopics() {
+    $("#list-subsubtopic-button").addClass('is-loading')
 
 	$.ajax({
 		url: "/list_subsubtopics",
@@ -107,6 +114,7 @@ function listSubsubtopics() {
 		data: JSON.stringify({}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#list-subsubtopic-button").removeClass('is-loading')
 			let prompt = data['prompt']
 			let subsubtopicListStr = data['subsubtopicListStr']
 			console.log("prompt:", prompt," subsubtopicListStr:",subsubtopicListStr)
@@ -121,6 +129,7 @@ function listSubsubtopics() {
 
 //select subsubtopic
 function selectSubsubtopic() {
+    $("#select-subsubtopic-button").addClass('is-loading')
 
 	let subsubtopic = $("#subsubtopic-input").val()
 
@@ -131,6 +140,7 @@ function selectSubsubtopic() {
 		data: JSON.stringify({"subsubtopic": subsubtopic}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#select-subsubtopic-button").removeClass('is-loading')
 			let prompt = data['prompt']
 			let subsubtopicExplanation = data['subsubtopicExplanation']
 			console.log("prompt:", prompt," subsubtopicExplanation:",subsubtopicExplanation)
@@ -147,7 +157,8 @@ function selectSubsubtopic() {
 
 //followup
 function followup() {
-
+    $("#followup-button").addClass('is-loading')
+    
 	let question = $("#followup-input").val()
 
 	$.ajax({
@@ -157,6 +168,7 @@ function followup() {
 		data: JSON.stringify({"question": question}),
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
+            $("#followup-button").removeClass('is-loading')
 			let question = data['question']
 			let answer = data['answer']
 			console.log("question:", prompt," answer:",answer)

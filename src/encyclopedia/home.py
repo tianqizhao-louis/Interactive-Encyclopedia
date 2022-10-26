@@ -9,7 +9,7 @@ import openai
 import re
 # from pprint import pprint
 
-openai.api_key = "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"
+openai.api_key = "Your key"
 
 bp = Blueprint('home', __name__)
 
