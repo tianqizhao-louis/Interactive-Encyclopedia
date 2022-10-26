@@ -63,6 +63,7 @@ function listSubtopics() {
 		success: function (data, textStatus, jqXHR) {
             $("#list-subtopic-button").removeClass('is-loading')
 			let prompt = data['prompt']
+			// TODO
 			let subtopicListStr = data['subtopicListStr']
 			console.log("prompt:", prompt," subtopicListStr:",subtopicListStr)
 

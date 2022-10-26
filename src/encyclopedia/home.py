@@ -1,18 +1,14 @@
 from flask import Flask
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify, Response, current_app
 )
-from flask import Response, request, jsonify
 
 import openai
 # import textwrap as tw
 import re
 # from pprint import pprint
 
-openai.api_key = "Your key"
-
 bp = Blueprint('home', __name__)
-
 
 @bp.route('/')
 def index():
@@ -21,6 +17,8 @@ def index():
 # explain topic route
 @bp.route('/explain_topic', methods = ['GET', 'POST'])
 def explainTopic():
+    openai.api_key = current_app.config["API_KEY"]
+    
     # json_data = request.get_json()
     global topic
     topic = request.get_json()['topic']
@@ -35,6 +33,8 @@ def explainTopic():
 # list subtopics
 @bp.route('/list_subtopics', methods = ['GET', 'POST'])
 def listSubTopicWithTopic():
+    openai.api_key = current_app.config["API_KEY"]
+
     prompt = f'''List 8 subtopics related to {topic} with brief explanation. Each in the form:
     subtopic: explanation
     1.
@@ -60,6 +60,8 @@ def listSubTopicWithTopic():
 # explain subtopic route
 @bp.route('/explain_subtopic', methods = ['GET', 'POST'])
 def explainSubtopic():
+    openai.api_key = current_app.config["API_KEY"]
+
     # json_data = request.get_json()
     global subtopic
     subtopicIndex = int(request.get_json()['subtopic'])
@@ -76,6 +78,8 @@ def explainSubtopic():
 # list subsubtopics
 @bp.route('/list_subsubtopics', methods = ['GET', 'POST'])
 def listSubsubTopicWithTopic():
+    openai.api_key = current_app.config["API_KEY"]
+
     global subtopic
     prompt = f'''List 8 subtopics related to {subtopic} in {topic} with brief explanation. Each in the form:
     subsubtopic: explanation
@@ -102,6 +106,8 @@ def listSubsubTopicWithTopic():
 # explain subsubtopic route
 @bp.route('/explain_subsubtopic', methods = ['GET', 'POST'])
 def explainSubsubtopic():
+    openai.api_key = current_app.config["API_KEY"]
+
     # json_data = request.get_json()
     global subsubtopic
     subsubtopicIndex = int(request.get_json()['subsubtopic'])
@@ -118,6 +124,8 @@ def explainSubsubtopic():
 #followup question
 @bp.route('/followup', methods = ['GET', 'POST'])
 def followupQuestion():
+    openai.api_key = current_app.config["API_KEY"]
+
     question = request.get_json()['question']
     prompt = f"For {subsubtopic} in {subtopic} in {topic}, explain with metaphor for a five years old kid:  \"{question}\""
     completion = openai.Completion.create(engine="text-davinci-002",max_tokens=256,temperature=0.7,prompt=prompt)
