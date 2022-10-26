@@ -1,33 +1,89 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title" id = "test">
-    Hello Kid
-</h1>
 
-<p class="subtitle">
-    This is Interactive Encyclopedia with <strong>Bulma</strong>!
-</p>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'home.js') }}"></script>
 
-<input id = "topic-input" type = "text" placeholder="Topic">
-<button id ="select-topic-button" type="button" class="button is-primary">Select Topic</button>
-<pre id="topic-explanation">Topic Explanation</pre>
 
-<button id ="list-subtopic-button" type="button" class="button is-primary">List Subtopics</button>
-<pre id="subtopics-list">Subtopic List</pre>
+    <div class="columns is-mobile is-centered">
+        <div class="column is-one-third">
+            <figure class="image is-2by1">
+                <img src="{{ url_for('static', filename = 'main_logo.jpeg') }}">
+            </figure>
+        </div>
+    </div>
 
-<input id = "subtopic-input" type = "text" placeholder="Subtopic Index">
-<button id ="select-subtopic-button" type="button" class="button is-primary">Select Subtopic</button>
-<pre id="subtopic-explanation">Subtopic Explanation</pre>
+    <div class="columns is-mobile is-centered">
+        <div class="column is-one-third has-text-centered">
+            <h1 class="title">
+                What's in your mind?
+            </h1>
+        </div>
+    </div>
 
-<button id ="list-subsubtopic-button" type="button" class="button is-primary">List Subsubtopics</button>
-<pre id="subsubtopics-list">Subsubtopic List</pre>
+    <div class="columns is-mobile is-centered">
+        <div class="column is-one-third has-text-centered">
+            <div class="dropdown">
+                <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Select a Topic</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">
+                            Universe
+                        </a>
+                        <a class="dropdown-item">
+                            Light
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            History
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item">
+                            Input my own topic
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<input id = "subsubtopic-input" type = "text" placeholder="Subsubtopic Index">
-<button id ="select-subsubtopic-button" type="button" class="button is-primary">Select Subsubtopic</button>
-<pre id="subsubtopic-explanation">Subsubtopic Explanation</pre>
 
-<input id = "followup-input" type = "text" placeholder="Followup Question">
-<button id ="followup-button" type="button" class="button is-primary">Submit Followup</button>
-<pre id="followup-answer">Followup Answer</pre>
+
+    {#<h1 class="title" id = "test">#}
+    {#    Hello Kid#}
+    {#</h1>#}
+    {##}
+    {##}
+    {##}
+    {#<p class="subtitle">#}
+    {#    This is Interactive Encyclopedia with <strong>Bulma</strong>!#}
+    {#</p>#}
+    {##}
+    {#<input id = "topic-input" type = "text" placeholder="Topic">#}
+    {#<button id ="select-topic-button" type="button" class="button is-primary">Select Topic</button>#}
+    {#<pre id="topic-explanation">Topic Explanation</pre>#}
+    {##}
+    {#<button id ="list-subtopic-button" type="button" class="button is-primary">List Subtopics</button>#}
+    {#<pre id="subtopics-list">Subtopic List</pre>#}
+    {##}
+    {#<input id = "subtopic-input" type = "text" placeholder="Subtopic Index">#}
+    {#<button id ="select-subtopic-button" type="button" class="button is-primary">Select Subtopic</button>#}
+    {#<pre id="subtopic-explanation">Subtopic Explanation</pre>#}
+    {##}
+    {#<button id ="list-subsubtopic-button" type="button" class="button is-primary">List Subsubtopics</button>#}
+    {#<pre id="subsubtopics-list">Subsubtopic List</pre>#}
+    {##}
+    {#<input id = "subsubtopic-input" type = "text" placeholder="Subsubtopic Index">#}
+    {#<button id ="select-subsubtopic-button" type="button" class="button is-primary">Select Subsubtopic</button>#}
+    {#<pre id="subsubtopic-explanation">Subsubtopic Explanation</pre>#}
+    {##}
+    {#<input id = "followup-input" type = "text" placeholder="Followup Question">#}
+    {#<button id ="followup-button" type="button" class="button is-primary">Submit Followup</button>#}
+    {#<pre id="followup-answer">Followup Answer</pre>#}
 {% endblock %}

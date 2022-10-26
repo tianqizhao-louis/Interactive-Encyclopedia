@@ -3,18 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Brandeis Career - Brandeis Alumni Career Path</title>
+    <title>Interactive Encyclopedia</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src = "https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename = 'base.js') }}"></script>
 </head>
 
 <body>
-    <section class="section">
-        <div class="container">
-            {% block content %}
-            
-            {% endblock %}
+
+<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <span><strong>Interactive Encyclopedia</strong></span>
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/">
+                Home
+            </a>
+
+            <a class="navbar-item" href="/">
+                Explore
+            </a>
         </div>
-    </section>        
+    </div>
+</nav>
+
+
+<section class="section">
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</section>
 </body>
