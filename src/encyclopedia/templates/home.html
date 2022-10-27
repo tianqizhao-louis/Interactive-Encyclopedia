@@ -22,8 +22,30 @@
     </div>
 
     <div class="columns is-mobile is-centered">
+        <div class="column is-1">
+
+        </div>
+        <div class="column is-4">
+            <label>
+                <input id="topic-input" class="input is-info" type="text" placeholder="Give me a topic">
+            </label>
+        </div>
+        <div class="column is-2">
+            <button id="ask-btn" class="button is-info">Ask!</button>
+        </div>
+    </div>
+
+    <div class="columns is-mobile is-centered mt-5">
+        <div class="column is-4 has-text-centered">
+            <p>
+                Or, select from our recommended topic list...
+            </p>
+        </div>
+    </div>
+
+    <div class="columns is-mobile is-centered">
         <div class="column is-one-third has-text-centered">
-            <div class="dropdown">
+            <div id="topic-dropdown" class="dropdown">
                 <div class="dropdown-trigger">
                     <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                         <span>Select a Topic</span>
@@ -42,10 +64,6 @@
                         </a>
                         <a href="/select/history" class="dropdown-item">
                             History
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item">
-                            Input my own topic
                         </a>
                     </div>
                 </div>

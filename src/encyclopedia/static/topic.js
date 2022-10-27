@@ -23,6 +23,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 console.log(error);
             });
     });
+
+
+    document.getElementById("delete-message-banner").addEventListener("click", function (event) {
+       event.preventDefault();
+       document.getElementById("banner").replaceChildren();
+    });
 });
 
 
@@ -142,13 +148,15 @@ function eventClickDropDownSubSubTopic(dropdownItemSelector, subtopic, subsubtop
         })
             .then(response => response.json())
             .then(data => {
-                // TODO
                 subsubTopicHolderColumn.replaceChildren();
                 createSubSubTopicExplanation(complete_subsubtopic);
                 addSubSubTopicMetaphor(data);
+
+                // Follow up questions
+                createFollowUp(subtopic, data["subsubtopic"]);
             })
             .catch(error => {
-               console.log(error);
+                console.log(error);
             });
     });
 }
@@ -185,9 +193,6 @@ function eventClickDropDown(dropdownItemSelector, subtopic, complete_subtopic) {
                 createSubtopicExplanation(complete_subtopic);
                 addSubtopicMetaphor(data);
                 createSubSubDropdown("subSubtopicDropDownId", document.getElementById("subSubTopicBtnHolder"), data, subtopic)
-
-                // Follow up questions
-                createFollowUp();
             })
             .catch(error => {
                 console.log(error);
@@ -196,8 +201,71 @@ function eventClickDropDown(dropdownItemSelector, subtopic, complete_subtopic) {
 }
 
 
-function createFollowUp() {
+/**
+ *
+ * @param subtopic
+ * @param subsubtopic
+ */
+function createFollowUp(subtopic, subsubtopic) {
     const followUpQuestionHolderSelector = document.getElementById("followUpQuestionHolder");
+
+    followUpQuestionHolderSelector.innerHTML = "<form id=\"followUpForm\">\n" +
+        "                <div class=\"field\">\n" +
+        "                    <label class=\"label\">Follow Up Question:</label>\n" +
+        "                    <div class=\"control\">\n" +
+        "                        <label>\n" +
+        "                            <input id='follow-ask' class=\"input\" type=\"text\" placeholder=\"Ask a follow up question\">\n" +
+        "                        </label>\n" +
+        "                    </div>\n" +
+        "                </div>\n" +
+        "                <div class=\"field is-grouped\">\n" +
+        "                    <div class=\"control\">\n" +
+        "                        <button id='submit-question-btn' class=\"button is-link is-light\">Submit</button>\n" +
+        "                    </div>\n" +
+        "                    <div class=\"control\">\n" +
+        "                        <button onclick=\"window.location.href='/'\" class=\"button\">Go Back to Home Page</button>\n" +
+        "                    </div>\n" +
+        "                </div>\n" +
+        "            </form>"
+
+    const submitSelector = document.getElementById("followUpForm");
+
+    submitSelector.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        document.getElementById("submit-question-btn").classList.add("is-loading");
+
+        let url = "/followupquestion";
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "question": document.getElementById("follow-ask").value,
+                "subsubtopic": subsubtopic,
+                "subtopic": subtopic,
+                "user_topic": user_topic
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                let question = document.createElement("p");
+                question.innerHTML = "<strong>Question: </strong>" + document.getElementById("follow-ask").value;
+                let answer = document.createElement("p");
+                answer.innerHTML = "<strong>Answer: </strong>" + data["answer"];
+
+                document.getElementById("followUpAnswerHolder").append(question);
+                document.getElementById("followUpAnswerHolder").append(answer);
+
+                document.getElementById("follow-ask").value = "";
+                document.getElementById("follow-ask").focus();
+                document.getElementById("submit-question-btn").classList.remove("is-loading");
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
 
 }
 
@@ -273,6 +341,11 @@ function createSubtopicExplanation(complete_subtopic) {
     subtopicHolderSelector.append(box);
 }
 
+
+/**
+ *
+ * @param complete_subsubtopic
+ */
 function createSubSubTopicExplanation(complete_subsubtopic) {
     const subsubHolderSelector = document.getElementById("subSubTopicExpHolder");
 

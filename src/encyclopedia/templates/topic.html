@@ -5,6 +5,7 @@
     <script>
         let user_topic = {{ user_topic | tojson | safe }};
         let topic_details = {{ topic_details | tojson | safe }};
+        let url_img = {{ url_img | tojson | safe }};
     </script>
 
     <script type="text/javascript" src="{{ url_for('static', filename = 'topic.js') }}"></script>
@@ -15,10 +16,25 @@
         </div>
     </div>
 
+    <div class="columns is-mobile is-centered" id="banner">
+        <div class="column is-half">
+            <article class="message is-warning">
+                <div class="message-header">
+                    <p>Reminder</p>
+                    <button id="delete-message-banner" class="delete" aria-label="delete"></button>
+                </div>
+                <div class="message-body">
+                    Please be aware that the answer from GPT may not be accurate, especially in medical-related topics.<br>
+                    You might have to <strong>verify</strong> the answer's accuracy with experts.
+                </div>
+            </article>
+        </div>
+    </div>
+
     <div class="columns is-mobile is-centered">
         <div class="column is-one-third">
             <figure class="image is-4by3">
-                <img src="https://cdn.mos.cms.futurecdn.net/jfkAU4tM8XMUAPZDm4h5Nh.jpeg" alt="topic logo">
+                <img src="{{ url_img }}" alt="topic logo">
             </figure>
         </div>
     </div>
@@ -31,7 +47,7 @@
                 </p>
                 <br>
                 <p>
-                    {{  topic_details["topic_explanation"] }}
+                    {{ topic_details["topic_explanation"] }}
                 </p>
                 <br>
                 <p>
@@ -61,10 +77,10 @@
         <div id="subSubTopicExpHolder" class="column is-full">
         </div>
 
-        <div id="followUpQuestionHolder" class="column is-full">
+        <div id="followUpAnswerHolder" class="column is-full">
         </div>
 
-        <div id="followUpAnswerHolder" class="column is-full">
+        <div id="followUpQuestionHolder" class="column is-full">
         </div>
     </div>
 
