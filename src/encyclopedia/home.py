@@ -70,11 +70,13 @@ def listSubTopicWithTopic():
     if (subtopicList[0] == ''):
         subtopicList = subtopicList[1:]
 
-    subtopicListStr = ''
+    #extract pure subtopics
+    pureSubtopics = []
     for index, subtopic in enumerate(subtopicList):
-        subtopicListStr += f'{index + 1}.{subtopic.strip()}\n'
+        pureSubtopic = re.findall(r'(.*):', subtopic)[0]
+        pureSubtopics.append(pureSubtopic)
 
-    to_return = {'prompt': prompt, 'subtopicListStr': subtopicListStr}
+    to_return = {'prompt': prompt, 'subtopicList': subtopicList, 'pureSubtopics':pureSubtopics}
     return jsonify(to_return)
 
 
@@ -118,11 +120,13 @@ def listSubsubTopicWithTopic():
     if (subsubtopicList[0] == ''):
         subsubtopicList = subsubtopicList[1:]
 
-    subsubtopicListStr = ''
-    for index, subtopic in enumerate(subsubtopicList):
-        subsubtopicListStr += f'{index + 1}.{subtopic.strip()}\n'
+    #extract pure subsubtopics
+    pureSubsubtopics = []
+    for index, subsubtopic in enumerate(subsubtopicList):
+        pureSubsubtopic = re.findall(r'(.*):', subsubtopic)[0]
+        pureSubsubtopics.append(pureSubsubtopic)
 
-    to_return = {'prompt': prompt, 'subsubtopicListStr': subsubtopicListStr}
+    to_return = {'prompt': prompt, 'subsubtopicList': subsubtopicList, 'pureSubsubtopics':pureSubsubtopics}
     return jsonify(to_return)
 
 
