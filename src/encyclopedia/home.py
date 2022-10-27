@@ -71,7 +71,7 @@ def render_sub_subtopic():
     result = completion.choices[0].text.strip()
 
     list_subsub = re.split(r'\d\. ', result)
-    while len(list_subsub) < 8 or ("?" in list_subsub[1]):
+    while len(list_subsub) < 8 or ("?" in list_subsub[1]) or (":" not in list_subsub[1]):
         completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt_list_subsub)
         result = completion.choices[0].text.strip()
         list_subsub = re.split(r'\d\. ', result)
