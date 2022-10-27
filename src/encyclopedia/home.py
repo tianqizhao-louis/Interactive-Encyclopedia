@@ -24,7 +24,14 @@ def topic(user_topic=None):
     prompt = f'For a 5 years old kid, explain what {user_topic} is'
     completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, prompt=prompt)
     topic_explanation = completion.choices[0].text.strip()
-    topic_details = {'prompt': prompt, 'topic_explanation': topic_explanation}
+
+    prompt_metaphor = f'For a 5 years old kid, explain what {user_topic} is with a metaphor'
+    metaphor_completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, prompt=prompt_metaphor)
+
+    metaphor_topic = metaphor_completion.choices[0].text.strip()
+
+    topic_details = {'prompt': prompt, 'topic_explanation': topic_explanation,
+                     'prompt_metaphor': prompt_metaphor, 'metaphor_topic': metaphor_topic}
 
     return render_template("topic.html", user_topic=user_topic, topic_details=topic_details)
 
@@ -34,9 +41,48 @@ def select(user_topic=None):
     return redirect(url_for('home.topic', user_topic=user_topic))
 
 
+@bp.route("/subtopic/select", methods=['POST'])
+def render_sub_subtopic():
+    data_json = request.get_json()
+    sub_topic = data_json["subtopic"]
+    user_topic = data_json["topic"]
+
+    prompt = f'For a 5 years old kid, explain what {sub_topic} in {user_topic} is with an metaphor.'
+    completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt)
+
+    subtopic_metaphor = completion.choices[0].text.strip()
+
+    prompt_list_subsub = f'''List 8 subtopics related to {sub_topic} in {user_topic} with brief explanation. Each in the form:
+        subsubtopic: explanation
+        1.
+    '''
+    completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt_list_subsub)
+    result = completion.choices[0].text.strip()
+
+    list_subsub = re.split(r'\d\. ', result)
+    while len(list_subsub) < 8 or ("?" in list_subsub[1]):
+        completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt_list_subsub)
+        result = completion.choices[0].text.strip()
+        list_subsub = re.split(r'\d\. ', result)
+    if list_subsub[0] == '':
+        list_subsub = list_subsub[1:]
+
+    # extract pure subsubtopics
+    pure_subsub = []
+    for subsub_i, subsub_topic in enumerate(list_subsub):
+        pure = re.findall(r'(.*):', subsub_topic)[0]
+        pure_subsub.append(pure)
+
+    to_return = {'prompt': prompt, 'subtopic_metaphor': subtopic_metaphor,
+                 'subsub_prompt': prompt_list_subsub,
+                 'subsub_topic': list_subsub,
+                 'subsub_pure': pure_subsub}
+    return jsonify(to_return)
+
+
 # explain topic.html route
 @bp.route('/explain_topic', methods=['GET', 'POST'])
-def explainTopic():
+def explain_topic():
     openai.api_key = current_app.config["API_KEY"]
 
     # json_data = request.get_json()
@@ -51,38 +97,38 @@ def explainTopic():
 
 
 # list subtopics
-@bp.route('/list_subtopics', methods=['GET', 'POST'])
-def listSubTopicWithTopic():
+@bp.route('/list_subtopics/<string:user_topic>', methods=['GET'])
+def list_subtopics(user_topic=None):
     openai.api_key = current_app.config["API_KEY"]
 
-    prompt = f'''List 8 subtopics related to {topic} with brief explanation. Each in the form:
+    prompt = f'''List 8 subtopics related to {user_topic} with brief explanation. Each in the form:
     subtopic: explanation
     1.
     '''
     completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt)
     result = completion.choices[0].text.strip()
-    global subtopicList
-    subtopicList = re.split(r'\d\. ', result)
-    while len(subtopicList) < 8:
+    # global subtopicList
+    subtopic_list = re.split(r'\d\. ', result)
+    while len(subtopic_list) < 8:
         completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt)
         result = completion.choices[0].text.strip()
-        subtopicList = re.split(r'\d\. ', result)
-    if (subtopicList[0] == ''):
-        subtopicList = subtopicList[1:]
+        subtopic_list = re.split(r'\d\. ', result)
+    if subtopic_list[0] == '':
+        subtopic_list = subtopic_list[1:]
 
-    #extract pure subtopics
-    pureSubtopics = []
-    for index, subtopic in enumerate(subtopicList):
-        pureSubtopic = re.findall(r'(.*):', subtopic)[0]
-        pureSubtopics.append(pureSubtopic)
+    # extract pure subtopics
+    pure_subtopics = []
+    for index_subtopic, each_subtopic in enumerate(subtopic_list):
+        pure = re.findall(r'(.*):', each_subtopic)[0]
+        pure_subtopics.append(pure)
 
-    to_return = {'prompt': prompt, 'subtopicList': subtopicList, 'pureSubtopics':pureSubtopics}
+    to_return = {'prompt': prompt, 'subtopic_list': subtopic_list, 'pure_subtopics': pure_subtopics}
     return jsonify(to_return)
 
 
 # explain subtopic route
 @bp.route('/explain_subtopic', methods=['GET', 'POST'])
-def explainSubtopic():
+def explain_subtopic():
     openai.api_key = current_app.config["API_KEY"]
 
     # json_data = request.get_json()
@@ -101,10 +147,12 @@ def explainSubtopic():
 
 # list subsubtopics
 @bp.route('/list_subsubtopics', methods=['GET', 'POST'])
-def listSubsubTopicWithTopic():
+def list_sub_sub_topics():
     openai.api_key = current_app.config["API_KEY"]
 
     global subtopic
+
+
     prompt = f'''List 8 subtopics related to {subtopic} in {topic} with brief explanation. Each in the form:
     subsubtopic: explanation
     1.
@@ -120,13 +168,13 @@ def listSubsubTopicWithTopic():
     if (subsubtopicList[0] == ''):
         subsubtopicList = subsubtopicList[1:]
 
-    #extract pure subsubtopics
+    # extract pure subsubtopics
     pureSubsubtopics = []
     for index, subsubtopic in enumerate(subsubtopicList):
         pureSubsubtopic = re.findall(r'(.*):', subsubtopic)[0]
         pureSubsubtopics.append(pureSubsubtopic)
 
-    to_return = {'prompt': prompt, 'subsubtopicList': subsubtopicList, 'pureSubsubtopics':pureSubsubtopics}
+    to_return = {'prompt': prompt, 'subsubtopicList': subsubtopicList, 'pureSubsubtopics': pureSubsubtopics}
     return jsonify(to_return)
 
 

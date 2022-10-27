@@ -5,21 +5,64 @@
     <script>
         let user_topic = {{ user_topic | tojson | safe }};
         let topic_details = {{ topic_details | tojson | safe }};
-
-        console.log(topic_details)
     </script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'topic.js') }}"></script>
 
     <div class="columns">
         <div class="column">
-            <h1 class="is-size-3">You are asking about: {{ user_topic }}</h1>
+            <h1 class="is-size-3">You are asking about: <strong>{{ user_topic }}</strong></h1>
+        </div>
+    </div>
+
+    <div class="columns is-mobile is-centered">
+        <div class="column is-one-third">
+            <figure class="image is-4by3">
+                <img src="https://cdn.mos.cms.futurecdn.net/jfkAU4tM8XMUAPZDm4h5Nh.jpeg" alt="topic logo">
+            </figure>
         </div>
     </div>
 
     <div class="columns">
         <div class="column">
             <div class="box">
-                {{  topic_details["topic_explanation"] }}
+                <p>
+                    <strong>{{ topic_details["prompt"] }}</strong>
+                </p>
+                <br>
+                <p>
+                    {{  topic_details["topic_explanation"] }}
+                </p>
+                <br>
+                <p>
+                    <strong>{{ topic_details["prompt_metaphor"] }}</strong>
+                </p>
+                <br>
+                <p>
+                    {{ topic_details["metaphor_topic"] }}
+                </p>
             </div>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div id="subtopicBtnHolder" class="column is-full">
+            <button id="btnSubtopic" class="button is-link is-light">Get A List of Subtopics</button>
+{#            <button class="button is-link is-light is-loading">Loading</button>#}
+        </div>
+        <div id="subtopicHolder" class="column is-full">
+        </div>
+
+        <div id="subSubTopicBtnHolder" class="column is-full">
+        </div>
+
+        <div id="subSubTopicHolder" class="column is-full">
+        </div>
+
+        <div id="followUpBtnHolder" class="column is-full">
+        </div>
+
+        <div id="followUpHolder" class="column is-full">
         </div>
     </div>
 
