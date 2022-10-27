@@ -62,12 +62,29 @@ function listSubtopics() {
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
             $("#list-subtopic-button").removeClass('is-loading')
-			let prompt = data['prompt']
-			// TODO
-			let subtopicListStr = data['subtopicListStr']
-			console.log("prompt:", prompt," subtopicListStr:",subtopicListStr)
+			$("#subtopics-list").html("")
 
-            $("#subtopics-list").text(subtopicListStr)
+			let prompt = data['prompt']
+			let subtopicList = data['subtopicList']
+			let pureSubtopics = data['pureSubtopics']
+			console.log("prompt:", prompt," subtopicList:",subtopicList, " pureSubtopics:",pureSubtopics)
+
+			jsonStringSubtopicList = JSON.stringify(subtopicList)
+			var objSubtopicList = JSON.parse(jsonStringSubtopicList)
+
+			for (i=0; i < objSubtopicList.length; i++) {
+				let subtopicRow = $("<pre>", { "id": "subtopic"+ i})
+				subtopicRow.text(objSubtopicList[i])
+				$("#subtopics-list").append(subtopicRow)
+			 }			 
+
+			// subtopicList.array.forEach(element => {
+			// 	let subtopicRow = $("<pre>", { "class": "", "id": "" });
+			// 	$("#subtopics-list").append(subtopicRow)
+			// });
+
+            // $("#subtopics-list").text(subtopicListStr)
+			
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert("error: " + errorThrown);
@@ -116,11 +133,20 @@ function listSubsubtopics() {
 		dataType: "json",
 		success: function (data, textStatus, jqXHR) {
             $("#list-subsubtopic-button").removeClass('is-loading')
+			$("#subsubtopics-list").html("")
 			let prompt = data['prompt']
-			let subsubtopicListStr = data['subsubtopicListStr']
-			console.log("prompt:", prompt," subsubtopicListStr:",subsubtopicListStr)
+			let subsubtopicList = data['subsubtopicList']
+			let pureSubsubtopics = data['pureSubsubtopics']
+			console.log("prompt:", prompt," subsubtopicList:",subsubtopicList, " pureSubsubtopics:", pureSubsubtopics)
 
-            $("#subsubtopics-list").text(subsubtopicListStr)
+            jsonStringSubsubtopicList = JSON.stringify(subsubtopicList)
+			var objSubsubtopicList = JSON.parse(jsonStringSubsubtopicList)
+
+			for (i=0; i < objSubsubtopicList.length; i++) {
+				let subsubtopicRow = $("<pre>", { "id": "subsubtopic"+ i})
+				subsubtopicRow.text(objSubsubtopicList[i])
+				$("#subsubtopics-list").append(subsubtopicRow)
+			 }		
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert("error: " + errorThrown);
