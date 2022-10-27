@@ -81,7 +81,6 @@ def render_sub_subtopic():
     # extract pure subsubtopics
     pure_subsub = []
     for subsub_i, subsub_topic in enumerate(list_subsub):
-        # TODO: buggy. List out of bound
         pure = re.findall(r'(.*):', subsub_topic)[0]
         pure_subsub.append(pure)
 
