@@ -80,6 +80,23 @@ def render_sub_subtopic():
     return jsonify(to_return)
 
 
+@bp.route("/subsubtopic/select", methods=["POST"])
+def select_subsub_topics():
+    data_json = request.get_json()
+
+    subsub_topic = data_json["subsubtopic"]
+    sub_topic = data_json["subtopic"]
+    user_topic = data_json["user_topic"]
+
+    prompt = f"For {sub_topic} in {user_topic}, explain what {subsub_topic} is with an metaphor for a five years old kid."
+    completion = openai.Completion.create(engine="text-davinci-002", max_tokens=256, temperature=0.7, prompt=prompt)
+
+    subsubtopic_explanation = completion.choices[0].text.strip()
+
+    to_return = {'prompt': prompt, 'subsubtopicExplanation': subsubtopic_explanation}
+    return jsonify(to_return)
+
+
 # explain topic.html route
 @bp.route('/explain_topic', methods=['GET', 'POST'])
 def explain_topic():
